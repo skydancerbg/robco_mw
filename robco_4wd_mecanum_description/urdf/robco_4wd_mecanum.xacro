@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<robot name="robco_4wd_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- RobcoMW 4wd mecanum wheel robot description-->
+<!-- Created by Stefan Chivarov-->
+<!-- IICT-BAS BG - Version 1.0 from Feb. 15th, 2021. -->
+
+<!--  NOTE:
+      <box>  The origin of the box is in its center.
+      <cylinder>  The origin of the cylinder is in its center. cylinder_coordinates.png
+      <joint>     This is the transform from the parent link to the child link. 
+                  The joint is located at the origin of the child link. -->
+
+
+
+<!--########### Properties, materials & calibration #####################################################-->
+<xacro:include filename="$(find robco_4wd_mecanum_description)/urdf/common_macros.xacro" />
+<xacro:include filename="$(find robco_4wd_mecanum_description)/urdf/left_wheel_assy_macros.xacro" />
+ <!-- Include controller plugin for Gazebo -->
+  <xacro:include filename="$(find robco_4wd_mecanum_description)/urdf/robco_4wd_mecanum.gazebo" />
+
+<!--<xacro:include filename="$(find robot_description)/urdf/gazebo" />-->
+  <!-- <xacro:include filename="$(find robot_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_properties.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_calibration.xacro" /> -->
+
+<!--########### Hardware macros #####################################################-->
+
+  <!-- <xacro:include filename="$(find robot_description)/urdf/macros.xacro" />  
+  <xacro:include filename="$(find robot_description)/urdf/robco_macros.xacro" />  
+  <xacro:include filename="$(find robot_description)/urdf/robco_2wd_base_macro.xacro" />  
+  <xacro:include filename="$(find robot_description)/urdf/robco_body_macro.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_imu_macro.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_rplidar_macro.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_mover4_macro.xacro" />
+  <xacro:include filename="$(find robot_description)/urdf/robco_kinect_mount_macro.xacro" />  -->
+
+<!--###################################################################################-->
+<!--###################################################################################-->  
+
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
+  <material name="black"><color rgba="0.15 0.15 0.15 1.0" /></material>
+  <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
+  <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
+
+     <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Blue">
+        <color rgba="0.0 0.0 0.8 1.0"/>
+    </material>
+
+    <material name="Green">
+        <color rgba="0.0 0.8 0.0 1.0"/>
+    </material>
+
+    <material name="Grey">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+    </material>
+
+    <material name="DarkGrey">
+        <color rgba="0.1 0.1 0.1 1.0"/>
+    </material>
+
+    <material name="Orange">
+        <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+    </material>
+
+    <material name="Brown">
+        <color rgba="${222/255} ${207/255} ${195/255} 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+<!--###################################################################################-->
+<!--###################################################################################-->  
+
+    <!-- ####### GENERIC CONSTANTS ##### -->
+
+    <!--All units in m-kg-s-radians unit system -->
+    <xacro:property name="PI" value="3.1415" />
+    <xacro:property name="M_PI" value="3.14159265358979323846264338327950288419716" />
+    <!--<xacro:property name="M_PI" value="3.1415926535897931" />-->
+    <xacro:property name="M_PI_2" value="1.570796327" />
+    <xacro:property name="ROTATE_90_DEGREES" value="1.570796327" />
+    <xacro:property name="ROTATE_180_DEGREES" value="${M_PI}" />
+    <xacro:property name="DEG_TO_RAD" value="0.017453293" />
+    <xacro:property name="SCALE_in_to_m" value="0.0254"/> <!--inches to meters-->
+    <xacro:property name="SCALE_mm_to_m" value="0.001"/> <!--milimeters to meters-->
+    <xacro:property name="kgcm_to_nm" value="0.0980665" />
+    <xacro:property name="gram_to_kg" value="0.001" />
+
+
+    <!-- ####### ROBOT ORIGINAL CHASSIS CONSTANTS ##### -->
+
+    <!-- ORIGINAL CHASSIS DIMENSIONS  --> 
+    <xacro:property name="chassis_lenght" value="${675*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_width" value="${530*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_height" value="${89*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_half_height" value="${chassis_height/2}" />  <!-- 34.5 *SCALE_mm_to_m-->
+    <xacro:property name="chassis_weight" value="${19.0-4*0.7}" /> <!-- in kg-->
+    <!-- Chassis: distance from the ground to bottom -->
+    <xacro:property name="chassis_bottom_z_offset" value="${40.2*SCALE_mm_to_m}" /> 
+    <xacro:property name="chassis_center_to_base_footprint_z_offset" value="${40.2*SCALE_mm_to_m + chassis_half_height}" /> 
+
+    
+    <!-- EUROPEAN STANDARD 2020 ALUMINIUM EXTRUSION PROFILE DIMENSIONS  --> 
+    <xacro:property name="profile_2020_width" value="${20*SCALE_mm_to_m}" />
+    <xacro:property name="profile_2020_height" value="${20*SCALE_mm_to_m}" />
+    <!-- 2020 1 Meter weights 0.55 kg/m --> <!-- CHECK THE WIGHT FOR THE ACTUAL 2020 PROFILE USED -->
+    <xacro:property name="profile_2020_weight_per_mm_lenght" value="${0.55/1000}" /> <!-- in kg/mm-->
+
+    <!-- EUROPEAN STANDARD 2060 ALUMINIUM EXTRUSION PROFILE DIMENSIONS  --> 
+    <xacro:property name="profile_2060_width_horizontal" value="${60*SCALE_mm_to_m}" />
+    <xacro:property name="profile_2060_height_horizontal" value="${20*SCALE_mm_to_m}" />
+    <xacro:property name="profile_2060_height_horizontal" value="${20*SCALE_mm_to_m}" />
+    <xacro:property name="profile_2060_height_vertical" value="${60*SCALE_mm_to_m}" />
+  <!-- 2060 1 Meter wights 1.21 kg/m --> <!-- CHECK THE WIGHT FOR THE ACTUAL 2060 PROFILE USED -->
+    <xacro:property name="profile_2060_weight_per_mm_lenght" value="${1.21/1000}" /> <!-- in kg/mm-->
+
+    <!-- MOTOR WITH SUPPORT AND ELASTIC CLUTCH COUPLER DIMENSIONS  -->
+    <!--  2.16 Kg - approximate with a box: h: 69 w: 60 l: 71+133.5+19 =223.5-->
+    <xacro:property name="motor_assy_width" value="${60*SCALE_mm_to_m}" />
+    <xacro:property name="motor_assy_height" value="${69*SCALE_mm_to_m}" />
+    <xacro:property name="motor_assy_lenght" value="${223.5*SCALE_mm_to_m}" />
+
+
+    <!-- FLANGE / WHEEL HINGE -->
+    <!--  0.06 Kg - approximate with cylinder d56.8 h26.4+5=31.4 -->
+    <xacro:property name="wheel_flange_diameter" value="${56.8*SCALE_mm_to_m}" />
+    <xacro:property name="wheel_flange_lenght" value="${31.4*SCALE_mm_to_m}" />
+
+    <!-- MECANUM WHEEL  SHAFT-->
+    <xacro:property name="shaft_diameter" value="${30.0*SCALE_mm_to_m}" />
+    <xacro:property name="shaft_radius" value="${shaft_diameter/2}" />
+    <!-- <xacro:property name="shaft_lenght" value="${23*SCALE_mm_to_m}" /> -->
+    <xacro:property name="shaft_lenght" value="${23.0*SCALE_mm_to_m}" />
+    <xacro:property name="shaft_half_lenght" value="${shaft_lenght/2}" />
+    <xacro:property name="shaft_mass" value="0.06" /> <!-- in kg-->
+    <xacro:property name="shaft_x_offset" value="${307.5*SCALE_mm_to_m}" />
+    <xacro:property name="shaft_y_offset" value="${265*SCALE_mm_to_m}" />
+    <xacro:property name="shaft_z_offset" value="${34.5*SCALE_mm_to_m}" />
+
+    <!-- MECANUM WHEELS -->
+    <xacro:property name="wheel_diameter" value="${6*SCALE_in_to_m}" />
+    <xacro:property name="wheel_radius" value="${wheel_diameter/2}" />
+    <xacro:property name="wheel_width" value="${46*SCALE_mm_to_m}" />
+    <xacro:property name="wheel_mass" value="0.820" /> <!-- in kg-->
+
+    <xacro:property name="left_wheel_x_offset" value="${307.5*SCALE_mm_to_m}" />
+    <xacro:property name="left_wheel_y_offset" value="${288.645468*SCALE_mm_to_m}" />
+    <xacro:property name="left_wheel_z_offset" value="${34.5*SCALE_mm_to_m}" />
+
+
+    <!-- <xacro:property name="base_x_origin_to_wheel_origin" value="0.0" /> -->
+    <!-- <xacro:property name="base_y_origin_to_wheel_origin" value="0.2" /> VAJNO!!!!!! da se izmeri pak - ot tova zawisi odometriata!!!!!!!!!!! -->
+    <!-- <xacro:property name="base_z_origin_to_wheel_origin" value="${-(base_plate_botom_from_base_frame_Z_offset - wheel_radius)}" /> -->
+
+<!-- ####### END ROBOT CONSTANTS ##### -->
+<!--###################################################################################-->
+<!--###################################################################################-->  
+
+
+
+  <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin, navigation stack depends on this frame -->
+  <link name="base_footprint">
+  <!-- <pose>0 0 0 0 0 0</pose> -->
+  </link>
+  
+<!-- The joint to the base_frame (the world) is set at height, equal to the distance form the ground to the bottom of the chassis -->
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 ${chassis_bottom_z_offset}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+
+  <link name="base_link">
+    <visual>
+    <!-- The chassis is represented with a box and the origin of that box is in it's center. 
+    That's why, in order to visualize properly, we need to add half of the box height to 
+    the distance from the ground allready defined in the joint. -->
+      <origin xyz="0 0 ${chassis_half_height}" rpy="0 0 0" />
+      <geometry>
+        <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/robco_base_link.STL" scale="0.001 0.001 0.001"/> -->
+      <box size="${chassis_lenght} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+      <!-- <material name="light_grey" /> -->
+      <material name="White" />
+
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="${chassis_lenght} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <!-- Inertia from CAD model, filled box assumption -->
+      <origin xyz="-0.01103 0 0.002" rpy="0 0 0"/>
+      <mass value="2.844"/>
+      <inertia
+        ixx="0.018819942" ixy="0" ixz="-0.000101519"
+        iyy="0.057333716" iyz="0"
+        izz="0.074201740"/>
+    </inertial>
+  </link>
+
+  <joint name="front_left_wheel_shaft_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_left_wheel_shaft_link" />
+    <origin xyz="${shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+  </joint>
+
+  <link name="front_left_wheel_shaft_link">
+    <visual>
+    <!-- The cylinder is vertical by default and the origin of the cylinder is in its center.
+    That's why we need to visually rotate it with 90 degrees and move it to the side with half lenght of the cylinder.   -->
+      <origin xyz="0 ${shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <geometry>
+        <cylinder radius="${shaft_radius}" length="${shaft_lenght}"/>
+        <!-- Here insted of showing a cylinder, we can add a mesh file for a nicer visualization in the following way: -->
+        <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/> -->
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 ${shaft_half_lenght} 0"/>
+      <geometry>
+        <cylinder radius="${shaft_radius}" length="${shaft_lenght}"/>
+      </geometry>
+    </collision>
+
+    <xacro:cylinder_inertial_with_origin radius="${shaft_radius}" length="${shaft_lenght}" mass="${shaft_mass}">
+      <origin xyz="0 ${shaft_half_lenght} 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_with_origin>
+
+  </link>
+
+
+  <joint name="front_left_wheel_joint" type="continuous">
+    <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+    <parent link="front_left_wheel_shaft_link"/>
+    <child link="front_left_wheel_link" />
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  <!-- <link name="front_left_wheel">
+    <visual>
+      <origin xyz="0 ${wheel_width/2} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <geometry>
+              <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="yellow" />
+    </visual>
+    <collision>
+      <origin xyz="0 ${wheel_width/2} 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="${wheel_mass}"/>
+      Inertia based on cylinder 
+            <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>  -->
+
+  <link name="front_left_wheel_link">
+    <visual>
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="${1*SCALE_mm_to_m} ${0.92*SCALE_mm_to_m} ${1.52*SCALE_mm_to_m}"/>
+      </geometry>
+      <material name="light_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial_with_origin radius="${wheel_radius}" length="${wheel_width}" mass="${wheel_mass}">
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_with_origin>
+  </link>
+
+<!-- WHEEL SHAFTS -->
+
+<!-- Invoke shaft_joint macros for the back left shaft -->
+    <xacro:shaft_joint name="back_left">
+      <origin xyz="${-shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+    </xacro:shaft_joint>
+
+<!-- Invoke shaft_link macros for the back left shaft -->
+    <xacro:shaft_link name="back_left" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
+      <origin xyz="0 ${shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+    </xacro:shaft_link>
+
+<!-- Invoke shaft_joint macros for the front right shaft -->
+    <xacro:shaft_joint name="front_right">
+      <origin xyz="${shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+    </xacro:shaft_joint>
+
+<!-- Invoke shaft_link macros for the front right shaft -->
+    <xacro:shaft_link name="front_right" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
+      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+    </xacro:shaft_link>
+
+<!-- Invoke shaft_joint macros for the back right shaft -->
+    <xacro:shaft_joint name="back_right">
+      <origin xyz="${-shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+    </xacro:shaft_joint>
+
+<!-- Invoke shaft_link macros for the back right shaft -->
+    <xacro:shaft_link name="back_right" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
+      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+    </xacro:shaft_link>
+
+<!-- WHEELS -->
+
+<!-- Invoke wheel_joint macros for the back left wheel joint-->
+    <xacro:wheel_joint name="back_left">
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+      <axis xyz="0 1 0"/>
+    </xacro:wheel_joint>
+
+<!-- Invoke wheel_joint macros for the back left wheel -->
+    <xacro:wheel_link name="back_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+    </xacro:wheel_link>
+
+<!-- Invoke wheel_joint macros for the front right wheel joint-->
+    <xacro:wheel_joint name="front_right">
+      <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
+      <axis xyz="0 1 0"/>
+    </xacro:wheel_joint>
+
+<!-- Invoke wheel_joint macros for the front right wheel -->
+    <xacro:wheel_link name="front_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
+      <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
+    </xacro:wheel_link>
+
+<!-- Invoke wheel_joint macros for the back right wheel joint-->
+    <xacro:wheel_joint name="back_right">
+      <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
+      <axis xyz="0 1 0"/>
+    </xacro:wheel_joint>
+
+<!-- Invoke wheel_joint macros for the back right wheel -->
+    <xacro:wheel_link name="back_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
+      <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
+    </xacro:wheel_link>
+
+
+
+
+
+  <!-- Include URM04 ultrasonic range finders -->
+  <!-- <xacro:include filename="$(find robco_4wd_mecanum_description)/urdf/urm04_sensor.xacro"/> -->
+  <!-- front sensor -->
+  <!-- <xacro:urm04_sensor frame_name="front_sensor" ros_topic="front_sensor" update_rate="10" min_range="0.04" max_range="2.5" horizontal_field_of_view="1.04" vertical_field_of_view="0.04" ray_count="2" /> -->
+  <!-- left sensor -->
+  <!-- <xacro:urm04_sensor frame_name="left_sensor" ros_topic="left_sensor" update_rate="10" min_range="0.04" max_range="2.5" horizontal_field_of_view="1.04" vertical_field_of_view="0.04" ray_count="2" /> -->
+  <!-- right sensor -->
+  <!-- <xacro:urm04_sensor frame_name="right_sensor" ros_topic="right_sensor" update_rate="10" min_range="0.04" max_range="2.5" horizontal_field_of_view="1.04" vertical_field_of_view="0.04" ray_count="2" /> -->
+  <!-- rear sensor -->
+  <!-- <xacro:urm04_sensor frame_name="rear_sensor" ros_topic="rear_sensor" update_rate="10" min_range="0.04" max_range="2.5" horizontal_field_of_view="1.04" vertical_field_of_view="0.04" ray_count="2" /> -->
+
+</robot>
+
+

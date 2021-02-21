@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="shaft_joint" params="name *origin">
+  <joint name="${name}_wheel_shaft_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="${name}_wheel_shaft_link" />
+    <insert_block name="origin" />
+  </joint>
+  </xacro:macro>
+
+  <xacro:macro name="shaft_link" params="name radius lenght mass color *origin">
+  <link name="${name}_wheel_shaft_link">
+    <visual>
+      <insert_block name="origin" />
+      <geometry>
+        <cylinder radius="${radius}" length="${lenght}"/>
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <insert_block name="origin" />
+      <geometry>
+        <cylinder radius="${radius}" length="${lenght}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial_with_origin radius="${radius}" length="${lenght}" mass="${mass}">
+      <insert_block name="origin" />
+    </xacro:cylinder_inertial_with_origin>
+  </link>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_joint" params="name *origin *axis">
+  <joint name="${name}_wheel_joint" type="fixed">
+    <insert_block name="origin" />
+    <parent link="${name}_wheel_shaft_link"/>
+    <child link="${name}_wheel_link" />
+    <insert_block name="axis" />    
+  </joint>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_link" params="name radius width mass color *origin mesh_file_name mesh_scale_x mesh_scale_y mesh_scale_z">
+  <link name="${name}_wheel_link">
+    <visual>
+    <insert_block name="origin" />
+      <geometry>
+        <mesh filename="${mesh_file_name}" scale="${mesh_scale_x} ${mesh_scale_y} ${mesh_scale_z}"/>
+      </geometry>
+      <material name="${color}"/>
+    </visual>
+    <collision>
+    <insert_block name="origin" />
+      <geometry>
+        <cylinder radius="${radius}" length="${width}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial_with_origin radius="${radius}" length="${width}" mass="${mass}">
+    <insert_block name="origin" />
+    </xacro:cylinder_inertial_with_origin>
+  </link>
+  </xacro:macro>
+
+
+</robot>
+  
+  <!-- <link name="${name}">
+    <collision name="${name}_collision">
+      <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <visual name="${name}_visual">
+      <origin xyz="0 0 0" rpy="0 ${pitch} ${yaw}"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+       <material name="${color}"/>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 ${pitch} ${yaw}"/>
+      <mass value="${wheel_mass}"/>
+      <inertia
+        ixx=".1" ixy="0.0" ixz="0.0"
+        iyy=".1" iyz="0.0"
+        izz=".1"/>
+    </inertial>
+  </link>     -->
+  
+
+
+  
+  
+  
+  
+  
+  
+  

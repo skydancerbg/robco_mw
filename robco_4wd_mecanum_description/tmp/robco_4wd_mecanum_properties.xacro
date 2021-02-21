@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="properties">
+
+<!-- Properties file for Robco 4WD MW robot -->
+<!-- Created by Stefan -->
+<!-- IICT-BAS BG - Version 1.0 from Feb. 15-th, 2021. -->
+
+
+
+    <!-- ####### GENERIC CONSTANTS ##### -->
+
+    <!--All units in m-kg-s-radians unit system -->
+    <xacro:property name="PI" value="3.1415" />
+    <xacro:property name="M_PI" value="3.14159265358979323846264338327950288419716" />
+    <!--<xacro:property name="M_PI" value="3.1415926535897931" />-->
+    <xacro:property name="M_PI_2" value="1.570796327" />
+    <xacro:property name="ROTATE_90_DEGREES" value="1.570796327" />
+    <xacro:property name="DEG_TO_RAD" value="0.017453293" />
+    <xacro:property name="SCALE_in_to_m" value="0.0254"/> <!--inches to meters-->
+    <xacro:property name="SCALE_mm_to_m" value="0.001"/> <!--milimeters to meters-->
+    <xacro:property name="kgcm_to_nm" value="0.0980665" />
+
+
+    <!-- ####### ROBOT ORIGINAL CHASSIS CONSTANTS ##### -->
+
+    <!-- CHASSIS DIMENSIONS  --> 
+    <xacro:property name="chassis_lenght" value="${650*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_width" value="${530*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_height" value="${106*SCALE_mm_to_m}" />
+    <xacro:property name="chassis_weight" value="${19-4*0.7}" /> <!-- in kg-->
+
+    <!-- MECANUM WHEELS -->
+    <xacro:property name="wheel_diameter" value="${6*SCALE_in_to_m}" />
+    <xacro:property name="wheel_radius" value="${wheel_diameter/2}" />
+    <xacro:property name="wheel_width" value="${46*SCALE_mm_to_m}" />
+    <xacro:property name="wheel_mass" value="0.700" /> <!-- in kg-->
+
+    <xacro:property name="base_x_origin_to_wheel_origin" value="0.0" />
+    <xacro:property name="base_y_origin_to_wheel_origin" value="0.2" /> <!--VAJNO!!!!!! da se izmeri pak - ot tova zawisi odometriata!!!!!!!!!!! -->
+    <xacro:property name="base_z_origin_to_wheel_origin" value="${-(base_plate_botom_from_base_frame_Z_offset - wheel_radius)}" />
+
+<!-- ####### END ROBOT CONSTANTS ##### -->
+<!--###################################################################################-->
+<!--###################################################################################-->  
+
+
+  <!-- BASE PLATE   -->
+  <xacro:property name="base_plate_botom_from_base_frame_Z_offset" value="${caster_assy_height}"/>   <!--da go naprawia param za macroto i ne triabva li da e +  round_plate_half_height  -->
+  <!-- in kg weight with the battery holder plate bellow -->
+  <xacro:property name="base_mass" value="1.75" /> <!-- towa e tegloeoto samo na plochite, da dobavia egloto na akumulatorite dwigateliite i kolelata-->
+
+
+  <!-- SECOND DECK   -->
+  <xacro:property name="top_first_botom_second_deck_distance" value="${0.145}" />
+  <xacro:property name="second_deck_from_base_link_Z_offset" value="${top_first_botom_second_deck_distance + round_plate_half_height}"/>
+  <xacro:property name="second_deck_height" value="${0.375*SCALE_in_to_m}" />
+  <xacro:property name="second_deck_radius" value="${17.75*SCALE_in_to_m/2}" />
+  <xacro:property name="second_deck_mass" value="1.5" />   <!-- in kg -->
+
+
+  <!-- THIRD DECK -->
+  <xacro:property name="top_second_botom_third_deck_distance" value="${0.156}" />
+  <xacro:property name="third_deck_from_second_deck_Z_offset" value="${top_second_botom_third_deck_distance + round_plate_half_height}"/>
+  <xacro:property name="third_deck_height" value="${0.375*SCALE_in_to_m}" />
+  <xacro:property name="third_deck_radius" value="${17.75*SCALE_in_to_m/2}" />
+  <xacro:property name="third_deck_mass" value="1.5" />   <!-- in kg -->
+
+
+
+
+  
+  <!-- CASTER WHEELS -->
+  <!-- caster wheel offsets from base origin -->
+  <xacro:property name="caster_X_offset_from_base_link" value="0.17"/>
+
+  <!-- caster wheel radius, height and mass -->
+  <xacro:property name="caster_assy_height" value="${0.09825}" />
+  <xacro:property name="caster_wheel_radius" value="${3*SCALE_in_to_m/2}" />
+
+  <xacro:property name="caster_box_mass" value="0.15" /> <!-- in kg-->
+  <xacro:property name="caster_box_height" value="${caster_assy_height- caster_wheel_radius*2}" />
+  <xacro:property name="caster_box_width" value="${caster_assy_height - caster_wheel_radius*2}" />
+  <xacro:property name="caster_box_lenght" value="${caster_assy_height- caster_wheel_radius*2}" />
+  <xacro:property name="caster_sphere_mass" value="0.15" /> <!-- in kg-->
+  <xacro:property name="caster_sphere_diameter" value="${caster_wheel_radius*2}" />
+  <xacro:property name="caster_sphere_radius" value="${caster_sphere_diameter/2}" />
+
+  <!-- STANDOFFS -->
+  <!-- deck standoff offsets -->
+  <xacro:property name="standoff_X_offset" value="${0.18 / 2}" />
+  <xacro:property name="standoff_Y_offset" value="${0.33 / 2}" />
+  
+  <!-- MOVER4 ARM -->
+  <xacro:property name="mover4_X_offset" value="${round_plate_radius - 0.216}" />
+  <xacro:property name="mover4_Y_offset" value="0.0" />
+  <xacro:property name="mover4_Z_offset" value="${round_plate_half_height}" />
+
+
+  <!-- SENSORS -->
+
+  <!-- KINECT -->
+  <xacro:property name="kinect_standoff_lenght" value="${0.42775}" /> <!-- ???????measure the real one???????????????-->
+  <xacro:property name="kinect_standoff_X_offset" value="${round_plate_radius-0.078}" />
+  <xacro:property name="kinect_standoff_Y_offset" value="${0.17 / 2}" />
+  <xacro:property name="kinect_standoff_Z_offset" value="${round_plate_height}" />
+
+  <xacro:property name="kinect_mount_point_from_support_plate_X_offset" value="${0.0}"/>
+  <xacro:property name="kinect_mount_point_from_support_plate_Y_offset" value="${0.0}" />
+  <xacro:property name="kinect_mount_point_from_support_plate_Z_offset" value="${kinect_support_half_height}" />
+
+  <xacro:property name="kinect_support_from_kinect_standoff_0__X_offset" value="${0.0}"/>
+  <xacro:property name="kinect_support_from_kinect_standoff_0__Y_offset" value="${-kinect_standoff_Y_offset}"/>
+  <xacro:property name="kinect_support_from_kinect_standoff_0__Z_offset" value="${(kinect_standoff_lenght - kinect_support_height)/2+kinect_support_half_height}" />
+
+  <xacro:property name="kinect_support_height" value="${round_plate_height}" />
+  <xacro:property name="kinect_support_half_height" value="${kinect_support_height/2}" />
+  <xacro:property name="kinect_support_width" value="${kinect_standoff_Y_offset *2 + 0.05}" />
+  <xacro:property name="kinect_support_lenght" value="${0.06}" />
+  <xacro:property name="kinect_support_mass" value="${.05}" />    <!--in kg-->
+
+
+    <!-- Define Kinect dimensions using properties -->
+   <xacro:property name="kinect_base_x" value="0.072" />
+   <xacro:property name="kinect_base_y" value="0.085" />
+   <xacro:property name="kinect_base_z" value="0.021" />
+
+   <xacro:property name="kinect_body_x" value="0.07271" />
+   <xacro:property name="kinect_body_y" value="0.27794" />
+   <xacro:property name="kinect_body_z" value="0.033" />
+
+   <xacro:property name="kinect_base_post_height" value="0.016" />
+   <xacro:property name="kinect_base_post_radius" value="0.005" />
+
+
+  <!-- RPLIDAR A2  -->
+  <xacro:property name="rplidar_diameter" value="${0.0757}" />
+  <xacro:property name="rplidar_height_of_laser_beam_plane" value="${0.0308}" />
+  <xacro:property name="rplidar_height" value="${0.0408}" />
+  <xacro:property name="rplidar_X_offset" value="${round_plate_radius-rplidar_diameter/2-0.01}" />
+  <xacro:property name="rplidar_Y_offset" value="${0.0}" />
+  <xacro:property name="rplidar_Z_offset" value="${round_plate_height+rplidar_height_of_laser_beam_plane}" />
+  <xacro:property name="rplidar_mesh_X_offset" value="${0.0}" />
+  <xacro:property name="rplidar_mesh_Y_offset" value="${-rplidar_diameter/2 + 0.007}" />
+  <xacro:property name="rplidar_mesh_Z_offset" value="${-rplidar_height_of_laser_beam_plane}" />
+  
+
+    <!-- CAMERA -->
+  <xacro:property name="cameraSize" value="${0.05}"/>
+  <xacro:property name="cameraMass" value="${0.1}"/>
+
+
+
+
+<!--###################################################################################-->
+
+
+
+</robot>
