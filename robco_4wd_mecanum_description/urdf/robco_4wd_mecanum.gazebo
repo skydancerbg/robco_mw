@@ -34,6 +34,18 @@
     <material>Gazebo/DarkGrey</material>
   </gazebo>
 
+  <gazebo reference="electronics_module_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>  
+
+  <gazebo reference="rplidar_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>  
+
+  <gazebo reference="realsense_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>  
+
   <gazebo reference="left_sensor">
     <material>Gazebo/Black</material>
   </gazebo>

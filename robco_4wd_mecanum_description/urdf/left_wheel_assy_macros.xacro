@@ -2,6 +2,63 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:macro name="fixed_joint" params="name parent_name child_name color *origin">
+  <joint name="${name}_link_joint" type="fixed">
+    <parent link="${parent_name}"/>
+    <child link="${child_name}"/>
+    <insert_block name="origin" />
+  </joint>
+  </xacro:macro>
+
+  <xacro:macro name="box_link" params="name lenght width height mass color *origin">
+  <link name="${name}_link">
+    <visual>
+    <!-- The chassis is represented with a box and the origin of that box is in it's center. 
+    That's why, in order to visualize properly, we need to add half of the box height to 
+    the distance from the ground allready defined in the joint. -->
+      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
+      <geometry>
+        <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/robco_base_link.STL" scale="0.001 0.001 0.001"/> -->
+        <box size="${lenght} ${width} ${height}"/>
+      </geometry>
+      <!-- <material name="light_grey" /> -->
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="${lenght} ${width} ${height}"/>
+      </geometry>
+    </collision>
+    <!-- Ivoke box_inertial_with_origin macro -->
+    <xacro:box_inertial_with_origin x="${lenght}" y="${width}" z="${height}" mass="${mass}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:box_inertial_with_origin>
+  </link>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_link" params="name radius lenght mass color *origin">
+  <link name="${name}_link">
+    <visual>
+      <insert_block name="origin" />
+      <geometry>
+        <cylinder radius="${radius}" length="${lenght}"/>
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <insert_block name="origin" />
+      <geometry>
+        <cylinder radius="${radius}" length="${lenght}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial_with_origin radius="${radius}" length="${lenght}" mass="${mass}">
+      <insert_block name="origin" />
+    </xacro:cylinder_inertial_with_origin>
+  </link>
+  </xacro:macro>
+
+
   <xacro:macro name="shaft_joint" params="name *origin">
   <joint name="${name}_wheel_shaft_joint" type="fixed">
     <parent link="base_link"/>

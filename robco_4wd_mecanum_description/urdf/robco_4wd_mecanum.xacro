@@ -106,7 +106,7 @@
     <xacro:property name="chassis_width" value="${530*SCALE_mm_to_m}" />
     <xacro:property name="chassis_height" value="${89*SCALE_mm_to_m}" />
     <xacro:property name="chassis_half_height" value="${chassis_height/2}" />  <!-- 34.5 *SCALE_mm_to_m-->
-    <xacro:property name="chassis_weight" value="${19.0-4*0.7}" /> <!-- in kg-->
+    <xacro:property name="chassis_mass" value="${19.0-4*0.7}" /> <!-- in kg-->
     <!-- Chassis: distance from the ground to bottom -->
     <xacro:property name="chassis_bottom_z_offset" value="${40.2*SCALE_mm_to_m}" /> 
     <xacro:property name="chassis_center_to_base_footprint_z_offset" value="${40.2*SCALE_mm_to_m + chassis_half_height}" /> 
@@ -191,29 +191,21 @@
       <origin xyz="0 0 ${chassis_half_height}" rpy="0 0 0" />
       <geometry>
         <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/robco_base_link.STL" scale="0.001 0.001 0.001"/> -->
-      <box size="${chassis_lenght} ${chassis_width} ${chassis_height}"/>
+        <box size="${chassis_lenght} ${chassis_width} ${chassis_height}"/>
       </geometry>
       <!-- <material name="light_grey" /> -->
-      <material name="White" />
-
+      <material name="Orange" />
     </visual>
-
     <collision>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <box size="${chassis_lenght} ${chassis_width} ${chassis_height}"/>
       </geometry>
     </collision>
-
-    <inertial>
-      <!-- Inertia from CAD model, filled box assumption -->
-      <origin xyz="-0.01103 0 0.002" rpy="0 0 0"/>
-      <mass value="2.844"/>
-      <inertia
-        ixx="0.018819942" ixy="0" ixz="-0.000101519"
-        iyy="0.057333716" iyz="0"
-        izz="0.074201740"/>
-    </inertial>
+    <!-- Ivoke box_inertial_with_origin macro -->
+    <xacro:box_inertial_with_origin x="${chassis_lenght}" y="${chassis_width}" z="${chassis_height}" mass="${chassis_mass}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:box_inertial_with_origin>
   </link>
 
   <joint name="front_left_wheel_shaft_joint" type="fixed">
@@ -255,8 +247,9 @@
     <child link="front_left_wheel_link" />
     <axis xyz="0 1 0"/>
   </joint>
-  
-  <!-- <link name="front_left_wheel">
+
+<!-- Wheel link version with cylinders   -->
+  <!-- <link name="front_left_wheel_link">
     <visual>
       <origin xyz="0 ${wheel_width/2} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
       <geometry>
@@ -281,6 +274,7 @@
     </inertial>
   </link>  -->
 
+<!-- Wheel link version with mesh   -->
   <link name="front_left_wheel_link">
     <visual>
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
@@ -373,6 +367,88 @@
       <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
     </xacro:wheel_link>
 
+
+
+<!-- **** ELECTRONICS BOX (MODULE) - height 100 mm ****  -->
+<!-- /batteries height is 76 mm whenlaying on the side. -->
+<!-- can accomadete, not only Raspberry PI 4 with passive cooling case,  -->
+<!-- but also  Intel NUC in the big case 51 mm height/ -->
+
+<!-- ! The Joint is positioned on top plane of the chassis (base_link) module -->
+  <xacro:fixed_joint name="electronics_box" parent_name="base_link" child_name="electronics_box_link" color="Grey">
+    <origin xyz="0 0 ${chassis_height}" rpy="0 0 0" />
+  </xacro:fixed_joint>
+
+  <xacro:box_link name="electronics_box" lenght="${chassis_lenght}" width="${chassis_width}" height="${100*SCALE_mm_to_m}" mass="15" color="yellow">
+    <origin xyz="0 0 ${100*SCALE_mm_to_m/2}" rpy="0 0 0" />
+  </xacro:box_link>
+
+<!-- **** ROBOT TORSO STANDOFF (POLE) height = 406.8 mm ****  -->
+<!-- The heap is located at about 0.53 of the human body lenght -->
+<!-- Robot haight - 1200 mm, Heap height from the ground = 1200 mm * 0.53 = 636 mm -->
+<!-- Torso standoff height is 636 mm - base_plate_botom_from_base_frame_Z_offset - chassis_height - electronics_box_height  -->
+<!-- standoff_height = 636 - 40.2 - 89 - 100 = 406.8 -->
+<!-- aluminium profile 40x40 will be used weight of the profile is: 2.45 kg/meter -->
+<!-- ! The Joint is positioned on top plane of the electronics box module -->
+  <xacro:fixed_joint name="torso_standoff" parent_name="electronics_box_link" child_name="torso_standoff_link" color="Grey">
+    <origin xyz="0 0 ${100*SCALE_mm_to_m}" rpy="0 0 0" />
+  </xacro:fixed_joint>
+
+  <xacro:box_link name="torso_standoff" lenght="${40*SCALE_mm_to_m}" width="${40*SCALE_mm_to_m}" height="${406.8*SCALE_mm_to_m}" mass="${2.45*0.4068}" color="Blue">
+    <origin xyz="0 0 ${406.8*SCALE_mm_to_m/2}" rpy="0 0 0" />
+  </xacro:box_link>
+
+
+<!--  **** RP LIDAR A2 **** -->
+<!-- Position the RP Lidar 10 mm from the front edge of the electronics box, to avoid the chance of collision, just in case. -->
+<!-- RP Lidar's /diameter 75.7 mm/ center point needs to be at x = (337.5 - 10) - (75.7/2) = 289.65 mm from the box center -->
+<!-- ! The Joint is positioned on top plane of the electronics box module -->
+  <xacro:fixed_joint name="rplidar" parent_name="electronics_box_link" child_name="rplidar_link" color="Red">
+    <origin xyz="${289.65*SCALE_mm_to_m} 0 ${100*SCALE_mm_to_m}" rpy="0 0 0" />
+  </xacro:fixed_joint>
+
+  <!-- <xacro:box_link name="rplidar" lenght="0.01" width="0.01" height="0.01" mass="0.01" color="Orange">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:box_link> -->
+ 
+  <xacro:cylinder_link name="rplidar" radius="${75.7/2*SCALE_mm_to_m}" lenght="${40.80*SCALE_mm_to_m}" mass="${0.190}" color="Orange">
+    <origin xyz="0 0 ${40.80/2*SCALE_mm_to_m}" rpy="0 0 0" />
+ </xacro:cylinder_link>
+
+<!-- **** Intel RealSense Depth Camera D435 ****  -->
+<!-- dimensions 90 mm × 25 mm × 25 mm    weight 258.5477 g. -->
+<!-- ! The Joint is positioned on the front plane of the torso standoff at height of ?? -->
+  <xacro:fixed_joint name="realsense" parent_name="electronics_box_link" child_name="realsense_link" color="Red">
+    <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" />
+  </xacro:fixed_joint>
+
+  <xacro:box_link name="realsense" lenght="${25*SCALE_mm_to_m}" width="${90*SCALE_mm_to_m}" height="${25*SCALE_mm_to_m}" mass="0.2585477" color="Orange">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:box_link>
+
+<!-- Camera direction VISUALIZER -->
+  <!-- <xacro:fixed_joint name="module_visualizer" parent_name="realsense_link" child_name="realsense_visualizer_link" color="Red">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:fixed_joint>
+
+  <xacro:box_link name="realsense_visualizer" lenght="0.01" width="0.01" height="0.1" mass="0.01" color="Red">
+       <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:box_link> -->
+
+
+
+
+
+<!-- JOINT AND LINK VISUALIZERS -->
+  <!-- <xacro:fixed_joint name="module_visualizer" parent_name="base_link" child_name="module_visualizer_link" color="Red">
+    <origin xyz="0 0 0.5" rpy="0 0 0" />
+  </xacro:fixed_joint>
+
+  <xacro:box_link name="module_visualizer" lenght="0.05" width="0.05" height="0.05" mass="0.01" color="Red">
+       <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:box_link> -->
+
+  
 
 
 
