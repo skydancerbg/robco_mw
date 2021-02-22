@@ -279,7 +279,7 @@
     <visual>
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="${1*SCALE_mm_to_m} ${0.92*SCALE_mm_to_m} ${1.52*SCALE_mm_to_m}"/>
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="${1*SCALE_mm_to_m} ${0.92*SCALE_mm_to_m} ${1.52*SCALE_mm_to_m}"/>
       </geometry>
       <material name="light_grey"/>
     </visual>
@@ -336,7 +336,8 @@
 
 <!-- Invoke wheel_joint macros for the back left wheel -->
     <xacro:wheel_link name="back_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
-      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
     </xacro:wheel_link>
@@ -349,7 +350,7 @@
 
 <!-- Invoke wheel_joint macros for the front right wheel -->
     <xacro:wheel_link name="front_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
-      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
     </xacro:wheel_link>
@@ -362,7 +363,7 @@
 
 <!-- Invoke wheel_joint macros for the back right wheel -->
     <xacro:wheel_link name="back_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
-      mesh_file_name="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
     </xacro:wheel_link>
@@ -403,28 +404,135 @@
 <!-- Position the RP Lidar 10 mm from the front edge of the electronics box, to avoid the chance of collision, just in case. -->
 <!-- RP Lidar's /diameter 75.7 mm/ center point needs to be at x = (337.5 - 10) - (75.7/2) = 289.65 mm from the box center -->
 <!-- ! The Joint is positioned on top plane of the electronics box module -->
-  <xacro:fixed_joint name="rplidar" parent_name="electronics_box_link" child_name="rplidar_link" color="Red">
+  <!-- **** RP LIDAR A2 CYLINDER VISUALISATION -->
+  <!-- <xacro:fixed_joint name="rplidar" parent_name="electronics_box_link" child_name="rplidar_link" color="Red">
     <origin xyz="${289.65*SCALE_mm_to_m} 0 ${100*SCALE_mm_to_m}" rpy="0 0 0" />
-  </xacro:fixed_joint>
+  </xacro:fixed_joint> -->
+   <!-- RP Lidar A2 cylinder visual -->
+  <!-- <xacro:cylinder_link name="rplidar" radius="${75.7/2*SCALE_mm_to_m}" lenght="${40.80*SCALE_mm_to_m}" mass="${0.190}" color="Orange">
+    <origin xyz="0 0 ${40.80/2*SCALE_mm_to_m}" rpy="0 0 0" />
+  </xacro:cylinder_link> -->
 
+  <!-- Mount point (joint) visual marker -->
   <!-- <xacro:box_link name="rplidar" lenght="0.01" width="0.01" height="0.01" mass="0.01" color="Orange">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:box_link> -->
- 
-  <xacro:cylinder_link name="rplidar" radius="${75.7/2*SCALE_mm_to_m}" lenght="${40.80*SCALE_mm_to_m}" mass="${0.190}" color="Orange">
-    <origin xyz="0 0 ${40.80/2*SCALE_mm_to_m}" rpy="0 0 0" />
- </xacro:cylinder_link>
+
+  <!-- <xacro:fixed_joint name="rplidar" parent_name="electronics_box_link" child_name="rplidar_link" color="Grey">
+    <origin xyz="${289.65*SCALE_mm_to_m} 0 ${100*SCALE_mm_to_m}" rpy="0 0 3.14" />
+  </xacro:fixed_joint> -->
+
+  <!-- <xacro:rplidar_a2 name="rplidar">
+    <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
+  </xacro:rplidar_a2> -->
+
+
+
+
+<joint name="rplidar_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${289.65*SCALE_mm_to_m} 0 ${100*SCALE_mm_to_m}" rpy="0 0 3.14" />
+    <parent link="electronics_box_link"/>
+    <child link="laser"/>
+  </joint>
+
+
+  <!-- rplidar Laser -->
+  <link name="laser">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
+      <geometry>
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/rplidar.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
+      <geometry>
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/rplidar.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+
+
+<!-- **** ORBBEC ASTRA Depth Camera  ****  -->
+
+  <!-- Orbbec Astra RGBD Camera -->
+  <joint name="astra_joint" type="fixed">
+    <!-- <axis xyz="0 0 0" /> -->
+    <!-- <origin xyz="-0.03 0 0.18" rpy="0 0 0"/> -->
+    <origin xyz="${(75)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 0.261799 0" />
+    <!-- <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" /> -->
+    <parent link="electronics_box_link"/>
+    <child link="camera_link"/>
+  </joint>
+
+  <link name="camera_link">
+    <collision>
+      <origin xyz="0.02 0 0" rpy="0 0 0"/>
+      <geometry>0
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.01 0 -0.03" rpy="1.5707 0 1.5707"/>
+      <geometry>
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/astra.dae" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <parent link="camera_link"/>
+    <child link="camera_rgb_frame"/>
+  </joint>
+
+  <link name="camera_rgb_frame">
+  </link>
+
+  <joint name="camera_depth_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <parent link="camera_link"/>
+    <child link="camera_depth_frame"/>
+  </joint>
+
+  <link name="camera_depth_frame">
+  </link>
+
+
+
+  <!-- ******************** =============================== ************************************ -->
 
 <!-- **** Intel RealSense Depth Camera D435 ****  -->
 <!-- dimensions 90 mm × 25 mm × 25 mm    weight 258.5477 g. -->
 <!-- ! The Joint is positioned on the front plane of the torso standoff at height of ?? -->
-  <xacro:fixed_joint name="realsense" parent_name="electronics_box_link" child_name="realsense_link" color="Red">
+  <!-- <xacro:fixed_joint name="realsense" parent_name="electronics_box_link" child_name="realsense_link" color="Red">
     <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" />
   </xacro:fixed_joint>
 
   <xacro:box_link name="realsense" lenght="${25*SCALE_mm_to_m}" width="${90*SCALE_mm_to_m}" height="${25*SCALE_mm_to_m}" mass="0.2585477" color="Orange">
     <origin xyz="0 0 0" rpy="0 0 0" />
-  </xacro:box_link>
+  </xacro:box_link> -->
+
+
+
+<!-- JOINT AND LINK VISUALIZERS -->
 
 <!-- Camera direction VISUALIZER -->
   <!-- <xacro:fixed_joint name="module_visualizer" parent_name="realsense_link" child_name="realsense_visualizer_link" color="Red">
@@ -436,10 +544,6 @@
   </xacro:box_link> -->
 
 
-
-
-
-<!-- JOINT AND LINK VISUALIZERS -->
   <!-- <xacro:fixed_joint name="module_visualizer" parent_name="base_link" child_name="module_visualizer_link" color="Red">
     <origin xyz="0 0 0.5" rpy="0 0 0" />
   </xacro:fixed_joint>

@@ -1,0 +1,125 @@
+<!-- https://github.com/husarion/rosbot_description/tree/master/src -->
+
+<?xml version="1.0"?>
+<robot name="rplidar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+
+<!-- <joint name="rplidar_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0.02 0 0.058" rpy="0 0 3.14"/>
+    <parent link="base_link"/>
+    <child link="laser"/>
+  </joint> -->
+
+  <!-- rplidar Laser -->
+          <!-- <origin xyz="0 0 0" rpy="1.5707 0 4.71"/> -->
+<!--           
+    <xacro:macro name="rplidara2_link" params="name *origin">
+    <link name="${name}_link">
+      <visual>
+        <xacro:insert_block name="origin" />
+        <geometry>
+          <mesh filename="package://robco_4wd_mecanum_description/meshes/rplidar.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual> 
+      <collision>
+        <xacro:insert_block name="origin" />
+        <geometry>
+          <mesh filename="package://robco_4wd_mecanum_description/meshes/rplidar.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>  
+      <inertial>
+        <mass value="1e-5" />
+        <xacro:insert_block name="origin" />
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+      </inertial>
+    </link>  -->
+
+</robot>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- https://answers.ros.org/question/304511/xacro-include-breaks-including-xacro-file/ -->
+<!-- https://answers.ros.org/question/216556/gmapping-using-a-virtual-turtlebot-robot-with-a-rplidar/ -->
+<!-- <?xml version="1.0"?>
+<robot name="rplidar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find testbot_description)/urdf/inertias.urdf.xacro" /> 
+    <xacro:include filename="$(find testbot_description)/urdf/materials.urdf.xacro" /> 
+
+    <xacro:property name="rplidar_mass" value="0.2" /> 
+    <xacro:property name="rplidar_radius" value="0.0757" /> 
+    <xacro:property name="rplidar_height" value="0.04080" />
+
+    <xacro:macro name="rplidar" params="parent translateX translateY">
+
+        <joint name="rplidar_joint" type="fixed">
+            <parent link="${parent}"/>
+            <child link="rplidar_link"/>
+        </joint>
+
+        <link name="rplidar_link">
+            <inertial>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <mass value="${rplidar_mass}"/>
+                <cylinder_inertia m="${rplidar_mass}" r="${rplidar_radius}" h="${rplidar_height}"/>
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <cylinder length="${rplidar_height}" radius="${rplidar_radius}" />
+                </geometry>
+                <material name="Blue" />
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <cylinder length="${rplidar_height}" radius="${rplidar_radius}" />
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="rplidar_link">
+            <material>Gazebo/Blue</material>
+            <turnGravityOff>false</turnGravityOff>
+            <sensor type="ray" name="rplidar_sensor">
+                <pose>${rplidar_radius/2} 0 0 0 0 0</pose>
+                <visualize>true</visualize>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>8000</samples>
+                            <min_angle>0</min_angle>
+                            <max_angle>3.14159265359</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.15</min>
+                        <max>8.0</max>
+                        <resolution>0.001</resolution>
+                    </range>
+                </ray>
+                <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_laser.so">
+                    <topicName>/scan</topicName>
+                    <frameName>rplidar_link</frameName>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+</robot> -->
