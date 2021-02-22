@@ -129,7 +129,7 @@
 
     <!-- ! USE THIS ORIGIN TO ALLIGN THE DAE VISUAL: -->
     <!-- <origin xyz="0 0 0" rpy="1.5707 0 4.71"/> -->
-    
+<!--     
   <xacro:macro name="rplidar_a2" params="name *origin">
   <link name="${name}_link">
     <visual>
@@ -150,7 +150,7 @@
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
     </inertial>
   </link> 
-  </xacro:macro>    
+  </xacro:macro>     -->
 
 </robot>
   

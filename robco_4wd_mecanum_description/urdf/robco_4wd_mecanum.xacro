@@ -463,14 +463,12 @@
 
 
 
-<!-- **** ORBBEC ASTRA Depth Camera  ****  -->
+<!-- **** ORBBEC ASTRA RGBD CAMERA  ****  -->
 
-  <!-- Orbbec Astra RGBD Camera -->
   <joint name="astra_joint" type="fixed">
-    <!-- <axis xyz="0 0 0" /> -->
-    <!-- <origin xyz="-0.03 0 0.18" rpy="0 0 0"/> -->
-    <origin xyz="${(75)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 0.261799 0" />
+    <axis xyz="0 0 0" />
     <!-- <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" /> -->
+    <origin xyz="${(75)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 0.261799 0" />
     <parent link="electronics_box_link"/>
     <child link="camera_link"/>
   </joint>
@@ -516,11 +514,10 @@
   </link>
 
 
-
   <!-- ******************** =============================== ************************************ -->
 
 <!-- **** Intel RealSense Depth Camera D435 ****  -->
-<!-- dimensions 90 mm × 25 mm × 25 mm    weight 258.5477 g. -->
+<!-- dimensions 90 mm x 25 mm x 25 mm    weight 258.5477 g. -->
 <!-- ! The Joint is positioned on the front plane of the torso standoff at height of ?? -->
   <!-- <xacro:fixed_joint name="realsense" parent_name="electronics_box_link" child_name="realsense_link" color="Red">
     <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" />
