@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <!-- <arg name="world_name" default="$(find robco_4wd_mecanum_gazebo)/worlds/kitchen_dining.world" /> -->
+  <arg name="custom" default="false" />
+  <arg name="custom_prefix" default="" />
+
+    <include file="$(find servicesim_competition)/launch/competition.launch">
+    <arg name="custom" value="$(arg custom)"/>
+    <arg name="custom_prefix" value="$(arg custom_prefix)"/>
+  </include>
+
+
+<!-- Load robot description -->
+<include file="$(find robco_4wd_mecanum_description)/launch/robco_4wd_mecanum_description.launch" />
+
+  <!-- Spawn the robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -model robco_4wd_mecanum -param robot_description -x 0 -y 0 -z 0.5" />
+
+</launch>

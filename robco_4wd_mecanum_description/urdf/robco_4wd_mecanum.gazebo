@@ -203,6 +203,7 @@
     <sensor type="ray" name="head_rplidar_sensor">
       <pose>0 0 0.06 0 0 0</pose>
       <visualize>false</visualize>
+      <!-- <visualize>true</visualize> -->
       <update_rate>40</update_rate>
       <ray>
         <scan>
@@ -268,7 +269,7 @@
 <!-- https://github.com/husarion/rosbot_description/blob/master/src/rosbot_description/urdf/rosbot.gazebo -->
 
   <gazebo reference="camera_link">
-    <material>Gazebo/Black</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
 
 
