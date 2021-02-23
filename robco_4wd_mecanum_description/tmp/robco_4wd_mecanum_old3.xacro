@@ -209,6 +209,92 @@
   </link>
 
 
+  <joint name="front_left_wheel_shaft_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_left_wheel_shaft_link" />
+    <origin xyz="${shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+  </joint>
+
+  <link name="front_left_wheel_shaft_link">
+    <visual>
+    <!-- The cylinder is vertical by default and the origin of the cylinder is in its center.
+    That's why we need to visually rotate it with 90 degrees and move it to the side with half lenght of the cylinder.   -->
+      <origin xyz="0 ${shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <geometry>
+        <cylinder radius="${shaft_radius}" length="${shaft_lenght}"/>
+        <!-- Here insted of showing a cylinder, we can add a mesh file for a nicer visualization in the following way: -->
+        <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/> -->
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 ${shaft_half_lenght} 0"/>
+      <geometry>
+        <cylinder radius="${shaft_radius}" length="${shaft_lenght}"/>
+      </geometry>
+    </collision>
+
+    <xacro:cylinder_inertial_with_origin radius="${shaft_radius}" length="${shaft_lenght}" mass="${shaft_mass}">
+      <origin xyz="0 ${shaft_half_lenght} 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_with_origin>
+
+  </link>
+
+
+  <joint name="front_left_wheel_joint" type="continuous">
+    <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+    <parent link="front_left_wheel_shaft_link"/>
+    <child link="front_left_wheel_link" />
+    <axis xyz="0 1 0"/>
+  </joint>
+
+<!-- Wheel link version with cylinders   -->
+  <!-- <link name="front_left_wheel_link">
+    <visual>
+      <origin xyz="0 ${wheel_width/2} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <geometry>
+              <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="yellow" />
+    </visual>
+    <collision>
+      <origin xyz="0 ${wheel_width/2} 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="${wheel_mass}"/>
+      Inertia based on cylinder 
+            <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>  -->
+
+<!-- Wheel link version with mesh   -->
+  <link name="front_left_wheel_link">
+    <visual>
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="${1*SCALE_mm_to_m} ${0.92*SCALE_mm_to_m} ${1.52*SCALE_mm_to_m}"/>
+      </geometry>
+      <material name="light_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial_with_origin radius="${wheel_radius}" length="${wheel_width}" mass="${wheel_mass}">
+      <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_with_origin>
+  </link>
+
 <!-- WHEEL SHAFTS -->
 
 <!-- Invoke shaft_joint macros for the front left shaft -->

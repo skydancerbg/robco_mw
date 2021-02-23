@@ -24,6 +24,7 @@
  */
 
 #include <robco_4wd_mecanum_gazebo/robco_ros_force_based_move.h>
+// #include <nexus_4wd_mecanum_gazebo/nexus_ros_force_based_move.h>
 
 namespace gazebo 
 {

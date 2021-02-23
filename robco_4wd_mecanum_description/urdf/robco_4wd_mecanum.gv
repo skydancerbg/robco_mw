@@ -1,0 +1,50 @@
+digraph G {
+node [shape=box];
+"base_footprint" [label="base_footprint"];
+"base_link" [label="base_link"];
+"back_left_wheel_shaft_link" [label="back_left_wheel_shaft_link"];
+"back_left_wheel_link" [label="back_left_wheel_link"];
+"back_right_wheel_shaft_link" [label="back_right_wheel_shaft_link"];
+"back_right_wheel_link" [label="back_right_wheel_link"];
+"electronics_box_link" [label="electronics_box_link"];
+"camera_link" [label="camera_link"];
+"camera_depth_frame" [label="camera_depth_frame"];
+"camera_rgb_frame" [label="camera_rgb_frame"];
+"laser" [label="laser"];
+"torso_standoff_link" [label="torso_standoff_link"];
+"front_left_wheel_shaft_link" [label="front_left_wheel_shaft_link"];
+"front_left_wheel_link" [label="front_left_wheel_link"];
+"front_right_wheel_shaft_link" [label="front_right_wheel_shaft_link"];
+"front_right_wheel_link" [label="front_right_wheel_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_footprint" -> "base_link_joint" [label="xyz: 0 0 0.0402 \nrpy: 0 -0 0"]
+"base_link_joint" -> "base_link"
+"base_link" -> "back_left_wheel_shaft_joint" [label="xyz: -0.3075 0.265 0.0345 \nrpy: 0 -0 0"]
+"back_left_wheel_shaft_joint" -> "back_left_wheel_shaft_link"
+"back_left_wheel_shaft_link" -> "back_left_wheel_joint" [label="xyz: 0 0.023 0 \nrpy: 0 -0 0"]
+"back_left_wheel_joint" -> "back_left_wheel_link"
+"base_link" -> "back_right_wheel_shaft_joint" [label="xyz: -0.3075 -0.265 0.0345 \nrpy: 0 -0 0"]
+"back_right_wheel_shaft_joint" -> "back_right_wheel_shaft_link"
+"back_right_wheel_shaft_link" -> "back_right_wheel_joint" [label="xyz: 0 -0.023 0 \nrpy: 0 -0 0"]
+"back_right_wheel_joint" -> "back_right_wheel_link"
+"base_link" -> "electronics_box_link_joint" [label="xyz: 0 0 0.089 \nrpy: 0 -0 0"]
+"electronics_box_link_joint" -> "electronics_box_link"
+"electronics_box_link" -> "astra_joint" [label="xyz: 0.075 0 0.45 \nrpy: 0 0.261799 0"]
+"astra_joint" -> "camera_link"
+"camera_link" -> "camera_depth_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_depth_joint" -> "camera_depth_frame"
+"camera_link" -> "camera_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_optical_joint" -> "camera_rgb_frame"
+"electronics_box_link" -> "rplidar_joint" [label="xyz: 0.28965 0 0.1 \nrpy: 0 -0 3.14"]
+"rplidar_joint" -> "laser"
+"electronics_box_link" -> "torso_standoff_link_joint" [label="xyz: 0 0 0.1 \nrpy: 0 -0 0"]
+"torso_standoff_link_joint" -> "torso_standoff_link"
+"base_link" -> "front_left_wheel_shaft_joint" [label="xyz: 0.3075 0.265 0.0345 \nrpy: 0 -0 0"]
+"front_left_wheel_shaft_joint" -> "front_left_wheel_shaft_link"
+"front_left_wheel_shaft_link" -> "front_left_wheel_joint" [label="xyz: 0 0.023 0 \nrpy: 0 -0 0"]
+"front_left_wheel_joint" -> "front_left_wheel_link"
+"base_link" -> "front_right_wheel_shaft_joint" [label="xyz: 0.3075 -0.265 0.0345 \nrpy: 0 -0 0"]
+"front_right_wheel_shaft_joint" -> "front_right_wheel_shaft_link"
+"front_right_wheel_shaft_link" -> "front_right_wheel_joint" [label="xyz: 0 -0.023 0 \nrpy: 0 -0 0"]
+"front_right_wheel_joint" -> "front_right_wheel_link"
+}
