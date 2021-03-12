@@ -54,7 +54,9 @@
     <material name="Green">
         <color rgba="0.0 0.8 0.0 1.0"/>
     </material>
-
+    <material name="LightGrey">
+        <color rgba="0.4 0.4 0.4 1.0" />
+    </material>
     <material name="Grey">
         <color rgba="0.2 0.2 0.2 1.0"/>
     </material>
@@ -213,59 +215,76 @@
 
 <!-- Invoke shaft_joint macros for the front left shaft -->
     <xacro:shaft_joint name="front_left">
-      <origin xyz="${shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+      <origin xyz="${shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="${ROTATE_90_DEGREES} 0 0" />
     </xacro:shaft_joint>
 
 <!-- Invoke shaft_link macros for the front left shaft -->
     <xacro:shaft_link name="front_left" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
-      <origin xyz="0 ${shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <origin xyz="0 0 ${-shaft_half_lenght}" rpy="0 0 0" />
     </xacro:shaft_link>
+
+<!-- Invoke wheel_joint macros for the front left wheel joint-->
+    <xacro:wheel_joint name="front_left">
+      <origin xyz="0 0 ${-shaft_half_lenght} " rpy="0 0 0" />
+      <axis xyz="0 0 1"/>
+    </xacro:wheel_joint>
+
+<!-- Invoke wheel_joint macros for the front left wheel -->
+    <!-- <link name="front_left_wheel_link">
+    </link> -->
+    <xacro:wheel_link name="front_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+      mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
+      mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
+      <origin xyz="0 0 ${-shaft_lenght}" rpy="${ROTATE_90_DEGREES} 0 0" />
+    </xacro:wheel_link>
+
 
 <!-- Invoke shaft_joint macros for the back left shaft -->
     <xacro:shaft_joint name="back_left">
-      <origin xyz="${-shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+      <origin xyz="${-shaft_x_offset} ${shaft_y_offset} ${shaft_z_offset}" rpy="0 ${ROTATE_90_DEGREES} ${ROTATE_90_DEGREES}" />
     </xacro:shaft_joint>
 
 <!-- Invoke shaft_link macros for the back left shaft -->
     <xacro:shaft_link name="back_left" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
-      <origin xyz="0 ${shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
     </xacro:shaft_link>
 
 <!-- Invoke shaft_joint macros for the front right shaft -->
     <xacro:shaft_joint name="front_right">
-      <origin xyz="${shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+      <origin xyz="${shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="${ROTATE_180_DEGREES} 0 ${ROTATE_180_DEGREES}" />
     </xacro:shaft_joint>
 
 <!-- Invoke shaft_link macros for the front right shaft -->
     <xacro:shaft_link name="front_right" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
-      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="0 0 0" />
     </xacro:shaft_link>
 
 <!-- Invoke shaft_joint macros for the back right shaft -->
     <xacro:shaft_joint name="back_right">
-      <origin xyz="${-shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="0 0 0" />
+      <origin xyz="${-shaft_x_offset} ${-shaft_y_offset} ${shaft_z_offset}" rpy="${ROTATE_180_DEGREES} 0 ${ROTATE_180_DEGREES}" />
     </xacro:shaft_joint>
 
 <!-- Invoke shaft_link macros for the back right shaft -->
     <xacro:shaft_link name="back_right" radius="${shaft_radius}" lenght="${shaft_lenght}" mass="${shaft_mass}" color="Red">
-      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="${ROTATE_90_DEGREES} 0 0" />
+      <origin xyz="0 ${-shaft_half_lenght} 0" rpy="0 0 0" />
     </xacro:shaft_link>
 
 <!-- WHEELS -->
 
 <!-- Invoke wheel_joint macros for the front left wheel joint-->
-    <xacro:wheel_joint name="front_left">
+    <!-- <xacro:wheel_joint name="front_left">
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
       <axis xyz="0 1 0"/>
-    </xacro:wheel_joint>
+    </xacro:wheel_joint> -->
 
 <!-- Invoke wheel_joint macros for the front left wheel -->
-    <xacro:wheel_link name="front_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+    <!-- <link name="front_left_wheel_link">
+    </link> -->
+    <!-- <xacro:wheel_link name="front_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
       mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
-
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
-    </xacro:wheel_link>
+    </xacro:wheel_link> -->
 
 <!-- Invoke wheel_joint macros for the back left wheel joint-->
     <xacro:wheel_joint name="back_left">
@@ -273,13 +292,14 @@
       <axis xyz="0 1 0"/>
     </xacro:wheel_joint>
 
-<!-- Invoke wheel_joint macros for the back left wheel -->
-    <xacro:wheel_link name="back_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+<!-- Invoke wheel_link macros for the back left wheel -->
+    <link name="back_left_wheel_link">
+    </link>
+    <!-- <xacro:wheel_link name="back_left" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
       mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
-
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${shaft_lenght} 0" rpy="0 0 0" />
-    </xacro:wheel_link>
+    </xacro:wheel_link> -->
 
 <!-- Invoke wheel_joint macros for the front right wheel joint-->
     <xacro:wheel_joint name="front_right">
@@ -288,11 +308,13 @@
     </xacro:wheel_joint>
 
 <!-- Invoke wheel_joint macros for the front right wheel -->
-    <xacro:wheel_link name="front_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+    <link name="front_right_wheel_link">
+    </link>
+    <!-- <xacro:wheel_link name="front_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
       mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
-    </xacro:wheel_link>
+    </xacro:wheel_link> -->
 
 <!-- Invoke wheel_joint macros for the back right wheel joint-->
     <xacro:wheel_joint name="back_right">
@@ -301,11 +323,13 @@
     </xacro:wheel_joint>
 
 <!-- Invoke wheel_joint macros for the back right wheel -->
-    <xacro:wheel_link name="back_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
+    <link name="back_right_wheel_link">
+    </link>
+    <!-- <xacro:wheel_link name="back_right" radius="${wheel_radius}" width="${wheel_width}" mass="${wheel_mass}" color="light_grey"
       mesh_file_name="package://robco_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" mesh_scale_x="${1*SCALE_mm_to_m}"
       mesh_scale_y="${0.92*SCALE_mm_to_m}" mesh_scale_z="${1.52*SCALE_mm_to_m}">
       <origin xyz="0 ${-shaft_lenght} 0" rpy="0 0 0" />
-    </xacro:wheel_link>
+    </xacro:wheel_link> -->
 
 
 
@@ -334,7 +358,6 @@
     <origin xyz="0 0 ${100*SCALE_mm_to_m}" rpy="0 0 0" />
   </xacro:fixed_joint>
 
-<!-- ! Mass of the aluminium profile is 2.45kg per meter -->
   <xacro:box_link name="torso_standoff" lenght="${40*SCALE_mm_to_m}" width="${40*SCALE_mm_to_m}" height="${406.8*SCALE_mm_to_m}" mass="${2.45*0.4068}" color="Blue">
     <origin xyz="0 0 ${406.8*SCALE_mm_to_m/2}" rpy="0 0 0" />
   </xacro:box_link>
@@ -367,7 +390,11 @@
   </xacro:rplidar_a2> -->
 
 
-
+<!-- lasr ray frame ??? https://docs.leorover.tech/integrations/lidar-sensor  -->
+<!-- https://github.com/husarion/rosbot_description/blob/master/src/rosbot_description/urdf/rosbot.xacro  -->
+<!-- https://github.com/tu-darmstadt-ros-pkg/hector_models/tree/melodic-devel/hector_sensors_description/urdf  -->
+<!-- https://answers.ros.org/question/304511/xacro-include-breaks-including-xacro-file/ -->
+<!-- https://www.cplusgears.com/lesson-5-adding-a-lidar.html !! -->
 
 <joint name="rplidar_joint" type="fixed">
     <axis xyz="0 1 0" />
@@ -401,7 +428,8 @@
     </inertial>
   </link>
 
-
+<!-- realsense: -->
+<!-- https://github.com/tu-darmstadt-ros-pkg/hector_models/blob/melodic-devel/hector_sensors_description/urdf/realsense_d435_camera.urdf.xacro  -->
 
 <!-- **** ORBBEC ASTRA RGBD CAMERA  ****  -->
 
@@ -462,18 +490,22 @@
   <!-- <xacro:fixed_joint name="realsense" parent_name="electronics_box_link" child_name="realsense_link" color="Red">
     <origin xyz="${(20)*SCALE_mm_to_m} 0 ${(100+350)*SCALE_mm_to_m}" rpy="0 1.8326 0" />
   </xacro:fixed_joint>
+
   <xacro:box_link name="realsense" lenght="${25*SCALE_mm_to_m}" width="${90*SCALE_mm_to_m}" height="${25*SCALE_mm_to_m}" mass="0.2585477" color="Orange">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:box_link> -->
 
+<!-- **** IMU - IMU (GazeboRosImu) and IMU sensor (GazeboRosImuSensor) -->
+<!-- http://gazebosim.org/tutorials?tut=ros_gzplugins -->
 
 
-<!-- JOINT AND LINK VISUALIZERS -->
+<!-- **** JOINT AND LINK VISUALIZERS -->
 
 <!-- Camera direction VISUALIZER -->
   <!-- <xacro:fixed_joint name="module_visualizer" parent_name="realsense_link" child_name="realsense_visualizer_link" color="Red">
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:fixed_joint>
+
   <xacro:box_link name="realsense_visualizer" lenght="0.01" width="0.01" height="0.1" mass="0.01" color="Red">
        <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:box_link> -->
@@ -482,6 +514,7 @@
   <!-- <xacro:fixed_joint name="module_visualizer" parent_name="base_link" child_name="module_visualizer_link" color="Red">
     <origin xyz="0 0 0.5" rpy="0 0 0" />
   </xacro:fixed_joint>
+
   <xacro:box_link name="module_visualizer" lenght="0.05" width="0.05" height="0.05" mass="0.01" color="Red">
        <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:box_link> -->
@@ -503,3 +536,5 @@
   <!-- <xacro:urm04_sensor frame_name="rear_sensor" ros_topic="rear_sensor" update_rate="10" min_range="0.04" max_range="2.5" horizontal_field_of_view="1.04" vertical_field_of_view="0.04" ray_count="2" /> -->
 
 </robot>
+
+

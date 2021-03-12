@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot name="robot_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+ <!-- ####### GENERIC CONSTANTS ##### -->
+
+  <!--All units in m-kg-s-radians unit system -->
+  <xacro:property name="PI" value="3.1415" />
+  <xacro:property name="M_PI" value="3.14159265358979323846264338327950288419716" />
+  <!--<xacro:property name="M_PI" value="3.1415926535897931" />-->
+  <xacro:property name="M_PI_2" value="1.570796327" />
+  <xacro:property name="ROTATE_90_DEGREES" value="${M_PI_2}" />
+  <xacro:property name="ROTATE_180_DEGREES" value="${M_PI}" />  
+  <xacro:property name="DEG_TO_RAD" value="0.017453293" />
+  <xacro:property name="SCALE_in_to_m" value="0.0254"/> <!--inches to meters-->
+  <xacro:property name="SCALE_mm_to_m" value="0.001"/> <!--milimeters to meters-->
+  <xacro:property name="kgcm_to_nm" value="0.0980665" />
+  <xacro:property name="cameraSize" value="0.05"/>
+  <xacro:property name="cameraMass" value="0.1"/>
+
+  <xacro:include filename="$(find mybot_description)/urdf/mybot.gazebo" />
+  <xacro:include filename="$(find mybot_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find mybot_description)/urdf/macros.xacro" />
+    <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
+  <material name="black"><color rgba="0.15 0.15 0.15 1.0" /></material>
+  <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
+  <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
+
+     <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Blue">
+        <color rgba="0.0 0.0 0.8 1.0"/>
+    </material>
+
+    <material name="Green">
+        <color rgba="0.0 0.8 0.0 1.0"/>
+    </material>
+
+    <material name="Grey">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+    </material>
+
+    <material name="DarkGrey">
+        <color rgba="0.1 0.1 0.1 1.0"/>
+    </material>
+
+    <material name="Orange">
+        <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+    </material>
+
+    <material name="Brown">
+        <color rgba="${222/255} ${207/255} ${195/255} 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+    <material name="Grey">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+    </material>
+ <link name="base_link">
+    <visual>
+      <geometry>
+        <!-- <cylinder length="0.1" radius="0.1"/> -->
+        <!-- <mesh filename="package://robco_4wd_mecanum_description/meshes/nexus_base_link.STL" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://robco_4wd_mecanum_description/meshes/robot5.STL" scale="0.5 0.5 0.5"/>
+
+      </geometry>
+      <material name="White" />
+    </visual>
+  </link>
+
+  <link name="right_leg">
+    <!-- <visual>
+      <geometry>
+        <box size="0.2 0.1 0.2"/>
+      </geometry>
+      <material name="Green" />
+    </visual> -->
+  </link>
+
+  <joint name="base_to_right_leg" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_leg"/>
+  </joint>
+
+
+
+
+
+   </robot>
